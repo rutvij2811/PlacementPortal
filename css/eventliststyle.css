@@ -1,0 +1,77 @@
+.calendar {
+    min-width: 350px;
+    max-width: 50%;
+    margin: 1em auto;
+    padding: 1em;
+    background: #EEE;
+    font-family: arial, helvetica, san-serif;
+    box-shadow: 0 0 0.1em rgba(0, 0, 0, 0.5);
+    border-radius: 0.2em;
+}
+
+.calendar:last-child {
+    border-top: 6px solid aqua;
+}
+
+.calendar h1 {
+    margin: 0 0 0.4em;
+    font-weight: bold;
+}
+
+.calendar .event {
+    color: #333;
+    display: block;
+    padding: 0.1em;
+    transition: all 0.25s ease;
+    margin-bottom: 0.5em;
+    border-bottom: 1px solid black;
+}
+
+.calendar .event:hover {
+    background: #d5d5d5;
+    text-decoration: none;
+    color: black;
+}
+
+.calendar .event_icon {
+    width: 4.5em;
+    float: left;
+    margin-right: 0.75em;
+}
+
+.calendar .event_month, .calendar .event_day {
+    text-align: center;
+}
+
+.calendar .event_month {
+    padding: 0.1em;
+    margin-bottom: 0.15em;
+    background: blue;
+    font-size: 0.75em;
+    color: white;
+    border-top-left-radius: 0.3em;
+    border-top-right-radius: 0.3em;
+}
+
+.calendar .event_day {
+    border: 1px solid #999;
+    background: white;
+    color: black;
+    font-size: 1.25em;
+    font-weight: bold;
+    border-bottom-left-radius: 0.1em;
+    border-bottom-right-radius: 0.1em;
+}
+
+.calendar .event_title {
+    font-size: 1.1em;
+    height: 3em;
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.calendar .btn {
+    margin-top: 0.5em;
+    width: 100%;
+    font-size: 1.5em;
+}
