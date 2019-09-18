@@ -31,3 +31,7 @@ $(document).ready(function () {
 function doneSubmitting() {
     location.href = 'ciradmin.html'
 }
+
+function doneSubmitting2() {
+    location.href = 'userProfile.html'
+}

@@ -9,6 +9,6 @@ function login() {
 
 function register() {
     alert("Registered!")
-    location.href = 'login.html';
+    document.getElementById("logmodule").className = "central badge";
 }
 
