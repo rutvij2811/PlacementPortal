@@ -1,3 +1,18 @@
+<?php
+ session_start();
+if(!isset($_SESSION['cemail'])){
+   header('location:login.php?sessionfailed');
+}
+include_once '../php/databaseconnect.php';
+$cemail=$_SESSION['cemail'];
+$sql="SELECT * from admin WHERE cemail='$cemail'";
+$result=mysqli_query($conn,$sql);
+if (mysqli_num_rows($result) != 1) {
+    header('location:logout.php?sessionfailed');
+    exit();
+}
+ 
+?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -30,7 +45,7 @@
                             </button>
                         </li>
                         <li>
-                            <button onclick="location.href = 'ciradmin.html'"
+                            <button onclick="location.href = 'ciradmin.php'"
                                     class="mdl-button mdl-js-button mdl-button--raised  white right"
                                     style="margin:10px;">Home
                             </button>
@@ -52,7 +67,7 @@
                 <button class="mdl-button mdl-js-button white" style="width:100%;">About</button>
             </li>
             <li>
-                <button onclick="location.href = 'ciradmin.html'" class="mdl-button mdl-js-button white"
+                <button onclick="location.href = 'ciradmin.php'" class="mdl-button mdl-js-button white"
                         style="width:100%;">Home
                 </button>
             </li>
@@ -66,7 +81,7 @@
     </header>
     <body class="blue" style="background-color: white !important;">
         <div class="container">
-            <form onsubmit="doneSubmitting()" action="#" method="post" target="ciradmin.html">
+            <form action="../php/addeventserver.php" method="post">
                 <div class="row">
                     <div class="col s12 l6 offset-l3 white-text card hoverable">
                         <div class="col s12 center">
@@ -82,10 +97,10 @@
                         </div>
                         <div class="input-field col s12">
                             <i class="material-icons prefix teal-text">attach_money</i>
-                            <input id="package" name="name" type="text" class="teal-text" required>
-                            <label for="package">Package</label>
+                            <input id="package" name="jpackage" type="number" step="0.01" class="teal-text" required>
+                            <label for="package">CTC Package in Lakhs</label>
                         </div>
-
+                        <!--
                         <div class="row">
                             <div class="col s12">
                                 <div class="col s4 teal-text gender">
@@ -104,11 +119,18 @@
                                 </div>
                             </div>
                         </div>
+                        !-->
                         <div class="input-field col s12">
-                            <select multiple class="teal-text" required>
+                            <i class="material-icons prefix teal-text">attachment</i>
+                            <input id="bond" name="jbond" type="number" step="0.01" class="teal-text" required>
+                            <label for="bond">Bond in Years</label>
+                        </div>
+
+                        <div class="input-field col s12">
+                            <select multiple class="teal-text" name="jbranch[]" size=4 required>
                                 <option selected disabled hidden style="display:none">Choose branches eligible</option>
                                 <option value="CSE">CSE</option>
-                                <option value="ELEC">ECE, EIE & EEE</option>
+                                <option value="ECE, EIE & EEE">ECE, EIE & EEE</option>
                                 <option value="MECH">MECH</option>
                                 <option value="MTECH">MTECH</option>
                             </select>
@@ -116,8 +138,14 @@
                         </div>
                         <div class="input-field col s12">
                             <i class="material-icons prefix teal-text">date_range</i>
-                            <input id="company-date" name="jdate" type="date" class="teal-text" required>
-                            <label for="company-date"></label>
+                            <input id="company-date" name="jdate" type="text" class="teal-text" required>
+                            <label for="company-date">Company Interview Dates</label>
+                        </div>
+                        <div class="input-field col s12">
+                            <p class="teal-text">Deadline</p>
+                            <i class="material-icons prefix teal-text">access_time</i>
+                            <input id="company-deadline" name="jdeadline" type="date" class="teal-text" required>
+                            <label for="company-deadline"></label>
                         </div>
                         <div class="input-field col s12">
                             <i class="material-icons prefix teal-text">local_offer</i>
@@ -137,7 +165,7 @@
                         </div>
                         <div class="col s12">&nbsp;</div>
                         <div class="col s12 center">
-                            <button type="submit" class="col s12 btn red hoverable">Submit</button>
+                            <button type="submit" name="submit" class="col s12 btn red hoverable">Submit</button>
                         </div>
                         <div class="col s12">&nbsp;</div>
                     </div>

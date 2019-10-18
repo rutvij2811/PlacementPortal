@@ -1,14 +1,24 @@
+<?php
+ session_start();
+if(!isset($_SESSION['cemail'])){
+   header('location:login.php?sessionfailed');
+}
+include_once '../php/databaseconnect.php';
+$cemail=$_SESSION['cemail'];
+$sql="SELECT * from admin WHERE cemail='$cemail'";
+$result=mysqli_query($conn,$sql);
+if (mysqli_num_rows($result) != 1) {
+    header('location:logout.php?sessionfailed');
+    exit();
+}
+ 
+?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Event List</title>
-        <meta name="viewport"
-              content="width=device-width,height=device-height initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
-        <link href='https://fonts.googleapis.com/css?family=Oswald|Montserrat:400,700|Cabin:500' rel='stylesheet'
-              type='text/css'>
-        <link rel="stylesheet" href="../css/eventliststyle.css">
-
+        <title>Delete Student</title>
+        <link rel="stylesheet" href="../css/deleteStyle.css">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"
                 type="text/javascript"></script>
         <link rel="stylesheet" href="https://code.getmdl.io/1.1.3/material.orange-indigo.min.css">
@@ -19,14 +29,7 @@
         <!--<script defer src="https://code.getmdl.io/1.1.3/material.min.js"></script>-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
-        <script>
-            $(document).ready(function () {
-                $('.button-collapse').sideNav();
-                $('.parallax').parallax();
-                $('.collapsible').collapsible();
-                $('.dropdown-trigger').dropdown();
-            });
-        </script>
+        <script src="../js/homeapp.js"></script>
 
     </head>
     <header>
@@ -44,9 +47,9 @@
                             </button>
                         </li>
                         <li>
-                            <button onclick="location.href = 'userProfile.html'"
+                            <button onclick="location.href = 'ciradmin.php'"
                                     class="mdl-button mdl-js-button mdl-button--raised  white right"
-                                    style="margin:10px;">User Profile
+                                    style="margin:10px;">Home
                             </button>
                         </li>
                         <li>
@@ -66,8 +69,8 @@
                 <button class="mdl-button mdl-js-button white" style="width:100%;">About</button>
             </li>
             <li>
-                <button onclick="location.href = 'userProfile.html'" class="mdl-button mdl-js-button white"
-                        style="width:100%;">User Profile
+                <button onclick="location.href = 'ciradmin.php'" class="mdl-button mdl-js-button white"
+                        style="width:100%;">Home
                 </button>
             </li>
             <li>
@@ -79,47 +82,36 @@
         </ul>
     </header>
     <body>
-        <div class="calendar">
-            <h1>Event Calendar</h1>
-            <a href="#" class="event clearfix">
-                <div class="event_icon">
-                    <div class="event_month">JUL</div>
-                    <div class="event_day">18</div>
+        <div class="central">
+            <form method="POST" action="../php/deletestudentroute.php">
+                <div class="inner-form">
+                    <label>Enter the student name: </label><br>
+                    <input id="sname" name="sname" type="text" placeholder="Student Name" list="students" autocomplete="off" required>
+                    <datalist id="students"></datalist>
+                    <br>
+                    <button name="submit" type="submit">Delete Student</button>
                 </div>
-                <div class="event_title"> Infosys<br/>
-                    CTC:4 lakhs&nbsp;&nbsp;Bond:No<br/>
-                    Branches Eligible: CSE,ECE,EIE,EEE,MECH,MTECH<br>
-                    Job Type: Internship + Placement&nbsp;&nbsp;Job Profile:Systems Engineer<br>
-                    Job Description:<br>
-                    Registration Link: www.google.com
-                </div>
-            </a>
-            <a href="#" class="event clearfix">
-                <div class="event_icon">
-                    <div class="event_month">JUL</div>
-                    <div class="event_day">20-23</div>
-                </div>
-                <div class="event_title">TCS<br/>
-                    CTC:3.33 lakhs&nbsp;&nbsp;Bond:No<br/>
-                    Branches Eligible: CSE,ECE,EIE,EEE,MECH,MTECH<br>
-                    Job Type: Placement&nbsp;&nbsp;Job Profile:Systems Engineer<br>
-                    Job Description:<br>
-                    Registration Link: www.google.com
-                </div>
-            </a>
-            <a href="#" class="event clearfix">
-                <div class="event_icon">
-                    <div class="event_month">JUL</div>
-                    <div class="event_day">20</div>
-                </div>
-                <div class="event_title"> Cognizant<br/>
-                    CTC:4-7 lakhs&nbsp;&nbsp;Bond:Yes<br/>
-                    Branches Eligible: CSE<br>
-                    Job Type: Internship + Placement&nbsp;&nbsp;Job Profile:Systems Engineer<br>
-                    Job Description:<br>
-                    Registration Link: www.google.com
-                </div>
-            </a>
+            </form>
         </div>
+
+        <script type="text/javascript">
+        $(document).ready(function() {
+			var events = [];
+			var a = [];
+			$.ajax({
+				url: '../php/acstudent.php',
+				async: false,
+				success: function(data) {
+					a = data;
+				}
+			});
+			a = JSON.parse(a);
+			Object.keys(a).forEach(function(key) {
+				events.push('<option value="' + a[key]["sname"] + '">' + a[key]["sname"] + "[" + a[key]["sregno"] + "]" + '</option>');
+			});
+			$('#students').html(events.join(''));
+        });
+        </script>
+
     </body>
 </html>
