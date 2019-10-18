@@ -1,8 +1,25 @@
+<?php
+ session_start();
+if(!isset($_SESSION['cemail'])){
+   header('location:login.php?sessionfailed');
+}
+include_once '../php/databaseconnect.php';
+$cemail=$_SESSION['cemail'];
+$sql="SELECT * from admin WHERE cemail='$cemail'";
+$result=mysqli_query($conn,$sql);
+if (mysqli_num_rows($result) != 1) {
+    header('location:logout.php?sessionfailed');
+    exit();
+}
+ 
+?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>View Student</title>
+        <title>Event List</title>
+        <meta name="viewport"
+              content="width=device-width,height=device-height initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
         <link href='https://fonts.googleapis.com/css?family=Oswald|Montserrat:400,700|Cabin:500' rel='stylesheet'
               type='text/css'>
         <link rel="stylesheet" href="../css/eventliststyle.css">
@@ -17,14 +34,8 @@
         <!--<script defer src="https://code.getmdl.io/1.1.3/material.min.js"></script>-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
-        <script>
-            $(document).ready(function () {
-                $('.button-collapse').sideNav();
-                $('.parallax').parallax();
-                $('.collapsible').collapsible();
-                $('.dropdown-trigger').dropdown();
-            });
-        </script>
+        <script src="../js/viewEvents.js"></script>
+
     </head>
     <header>
         <div class="navbar-fixed">
@@ -41,7 +52,7 @@
                             </button>
                         </li>
                         <li>
-                            <button onclick="location.href = 'ciradmin.html'"
+                            <button onclick="location.href = 'ciradmin.php'"
                                     class="mdl-button mdl-js-button mdl-button--raised  white right"
                                     style="margin:10px;">Home
                             </button>
@@ -63,7 +74,7 @@
                 <button class="mdl-button mdl-js-button white" style="width:100%;">About</button>
             </li>
             <li>
-                <button onclick="location.href = 'ciradmin.html'" class="mdl-button mdl-js-button white"
+                <button onclick="location.href = 'ciradmin.php'" class="mdl-button mdl-js-button white"
                         style="width:100%;">Home
                 </button>
             </li>
@@ -76,33 +87,8 @@
         </ul>
     </header>
     <body>
-        <div class="calendar">
-            <h1>Placed Students Info</h1>
-            <a href="#" class="event clearfix">
-                <div class="event_icon">
-                    <div class="event_month">Amazon</div>
-                    <div class="event_day">30 Lakhs</div>
-                </div>
-                <div class="event_title">Ramesh<br/>
-                    Suresh<br/>Mukesh
-                </div>
-            </a>
-            <a href="#" class="event clearfix">
-                <div class="event_icon">
-                    <div class="event_month">Cisco</div>
-                    <div class="event_day">29 Lakhs</div>
-                </div>
-                <div class="event_title">Lalitha<br>
-                    Sunita<br>Kamala
-                </div>
-            </a>
-            <a href="#" class="event clearfix">
-                <div class="event_icon">
-                    <div class="event_month">Arista</div>
-                    <div class="event_day">14.3 Lakhs</div>
-                </div>
-                <div class="event_title">Preethi</div>
-            </a>
+        <div class="calendar" id="events">
+            <h1>Event Calendar</h1>
         </div>
     </body>
 </html>

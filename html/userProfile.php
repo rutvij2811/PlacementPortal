@@ -1,3 +1,18 @@
+<?php
+ session_start();
+if(!isset($_SESSION['semail'])){
+   header('location:login.php?sessionfailed');
+}
+include_once '../php/databaseconnect.php';
+$semail=$_SESSION['semail'];
+$sql="SELECT * from student WHERE semail='$semail'";
+$result=mysqli_query($conn,$sql);
+if (mysqli_num_rows($result) != 1) {
+    header('location:logout.php?sessionfailed');
+    exit();
+}
+ 
+?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -29,7 +44,7 @@
                             </button>
                         </li>
                         <li>
-                            <button onclick="location.href = 'eventlist.html'"
+                            <button onclick="location.href = 'eventlist.php'"
                                     class="mdl-button mdl-js-button mdl-button--raised  white right"
                                     style="margin:10px;">Home
                             </button>
@@ -51,7 +66,7 @@
                 <button class="mdl-button mdl-js-button white" style="width:100%;">About</button>
             </li>
             <li>
-                <button onclick="location.href = 'eventlist.html'" class="mdl-button mdl-js-button white"
+                <button onclick="location.href = 'eventlist.php'" class="mdl-button mdl-js-button white"
                         style="width:100%;">Home
                 </button>
             </li>

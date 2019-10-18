@@ -1,8 +1,23 @@
+<?php
+ session_start();
+if(!isset($_SESSION['cemail'])){
+   header('location:login.php?sessionfailed');
+}
+include_once '../php/databaseconnect.php';
+$cemail=$_SESSION['cemail'];
+$sql="SELECT * from admin WHERE cemail='$cemail'";
+$result=mysqli_query($conn,$sql);
+if (mysqli_num_rows($result) != 1) {
+    header('location:logout.php?sessionfailed');
+    exit();
+}
+ 
+?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Delete Job</title>
+        <title>Add Placed Student</title>
         <link rel="stylesheet" href="../css/deleteStyle.css">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"
                 type="text/javascript"></script>
@@ -15,6 +30,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
         <script src="../js/homeapp.js"></script>
+
     </head>
     <header>
         <div class="navbar-fixed">
@@ -31,7 +47,7 @@
                             </button>
                         </li>
                         <li>
-                            <button onclick="location.href = 'ciradmin.html'"
+                            <button onclick="location.href = 'ciradmin.php'"
                                     class="mdl-button mdl-js-button mdl-button--raised  white right"
                                     style="margin:10px;">Home
                             </button>
@@ -53,7 +69,7 @@
                 <button class="mdl-button mdl-js-button white" style="width:100%;">About</button>
             </li>
             <li>
-                <button onclick="location.href = 'ciradmin.html'" class="mdl-button mdl-js-button white"
+                <button onclick="location.href = 'ciradmin.php'" class="mdl-button mdl-js-button white"
                         style="width:100%;">Home
                 </button>
             </li>
@@ -67,12 +83,53 @@
     </header>
     <body>
         <div class="central">
-            <form action="post">
-                <label>Enter the job name to delete: </label><br>
-                <input type="text" placeholder="Job Name" required>
-                <br>
-                <button type="button" value="delete">Delete This Job</button>
+            <form method="POST" action="../php/placedroute.php">
+                <div class="inner-form">
+                    <label>Enter the student name: </label><br>
+                    <input id="sname" name="sname" type="text" placeholder="Student Name" list="students" autocomplete="off" required>
+                    <datalist id="students"></datalist>
+                    <br>
+                    <label>Enter student's job: </label><br>
+			        <input id="jname" name="jname" type="text" placeholder="Job Name" autocomplete="off" list="jobs" required>
+        	        <datalist id="jobs"></datalist>
+                    <button name="submit" type="submit">Add Student Job</button>
+                </div>
             </form>
         </div>
+
+
+        <script type="text/javascript">
+		$(document).ready(function() {
+			var events = [];
+			var a = [];
+			$.ajax({
+				url: '../php/acjob.php',
+				async: false,
+				success: function(data) {
+					a = data;
+				}
+			});
+			a = JSON.parse(a);
+			Object.keys(a).forEach(function(key) {
+				events.push('<option value="' + a[key]["jname"] + '">' + a[key]["jname"] + "[" + a[key]["jpackage"] + "]" + '</option>');
+			});
+			$('#jobs').html(events.join(''));
+            var events = [];
+			var a = [];
+			$.ajax({
+				url: '../php/acstudent.php',
+				async: false,
+				success: function(data) {
+					a = data;
+				}
+			});
+			a = JSON.parse(a);
+			Object.keys(a).forEach(function(key) {
+				events.push('<option value="' + a[key]["sname"] + '">' + a[key]["sname"] + "[" + a[key]["sregno"] + "]" + '</option>');
+			});
+			$('#students').html(events.join(''));
+		});
+	    </script>
+
     </body>
 </html>
